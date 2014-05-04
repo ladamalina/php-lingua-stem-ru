@@ -2,7 +2,7 @@
 
 namespace Stem;
 
-class LinguaStemRu 
+class LinguaStemRu
 {
     var $VERSION = "0.02";
     var $Stem_Caching = 0;
@@ -17,6 +17,10 @@ class LinguaStemRu
     var $RVRE = '/^(.*?[аеиоуыэюя])(.*)$/';
     var $DERIVATIONAL = '/[^аеиоуыэюя][аеиоуыэюя]+[^аеиоуыэюя]+[аеиоуыэюя].*(?<=о)сть?$/';
 
+    function __construct() {
+        mb_internal_encoding('UTF-8');
+    }
+
     function s(&$s, $re, $to)
     {
         $orig = $s;
@@ -29,9 +33,9 @@ class LinguaStemRu
         return preg_match($re, $s);
     }
 
-    function stem_word($word) 
+    function stem_word($word)
     {
-        $word = strtolower($word);
+        $word = mb_strtolower($word);
         $word = strtr($word, 'ё', 'е'); // замена ё на е, что бы учитывалась как одна и та же буква
         # Check against cache of stemmed words
         if ($this->Stem_Caching && isset($this->Stem_Cache[$word])) {
@@ -66,7 +70,7 @@ class LinguaStemRu
           # Step 4
           if (!$this->s($RV, '/ь$/', '')) {
               $this->s($RV, '/ейше?/', '');
-              $this->s($RV, '/нн$/', 'н'); 
+              $this->s($RV, '/нн$/', 'н');
           }
 
           $stem = $start.$RV;
@@ -75,7 +79,7 @@ class LinguaStemRu
         return $stem;
     }
 
-    function stem_caching($parm_ref) 
+    function stem_caching($parm_ref)
     {
         $caching_level = @$parm_ref['-level'];
         if ($caching_level) {
@@ -87,7 +91,7 @@ class LinguaStemRu
         return $this->Stem_Caching;
     }
 
-    function clear_stem_cache() 
+    function clear_stem_cache()
     {
         $this->Stem_Cache = array();
     }
