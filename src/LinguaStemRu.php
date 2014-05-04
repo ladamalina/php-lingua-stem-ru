@@ -1,4 +1,7 @@
 <?php
+
+namespace Stem;
+
 class LinguaStemRu 
 {
     var $VERSION = "0.02";
