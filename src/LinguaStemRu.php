@@ -79,6 +79,41 @@ class LinguaStemRu
         return $stem;
     }
 
+
+    /**
+     * Стэмит все русские слова в тексте, оставляя пробелы и прочие знаки препинания на месте.
+     * @param $text
+     * @return string
+     */
+    function stem_text($text)
+    {
+        $separators_arr= array('?',' ', '.', ',', ';','!','"','\'','`');
+        $pos = 0;
+        while($pos<mb_strlen($text)){
+            $min_new_pos = mb_strlen($text);
+            foreach ($separators_arr as $sep) {
+                $newpos_candidate = mb_strpos($text, $sep, $pos);
+                if($newpos_candidate!==FALSE) {
+                    $min_new_pos = ($newpos_candidate < $min_new_pos) ? $newpos_candidate : $min_new_pos;
+                }
+            }
+            $newpos = $min_new_pos;
+            $word_part = mb_substr($text, $pos, $newpos-$pos);
+            $word = mb_ereg_replace("[^АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯабвгдеёжзийклмнопрстуфхцчшщъыьэюя]","",$word_part);
+            if($word == ''){
+                $pos = $newpos+1;
+            }else{
+                $word_stemmed = $this->stem_word($word);
+                $word_stemmed_part = str_replace($word,$word_stemmed,$word_part);
+
+                $text = mb_substr($text,0,$pos) . $word_stemmed_part . mb_substr($text, $newpos);
+
+                $pos = $newpos - (mb_strlen($word)-mb_strlen($word_stemmed));
+            }
+        }
+        return $text;
+    }
+
     function stem_caching($parm_ref)
     {
         $caching_level = @$parm_ref['-level'];
