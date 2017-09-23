@@ -87,7 +87,7 @@ class LinguaStemRu
      */
     function stem_text($text)
     {
-        $separators_arr=['?',' ', '.', ',', ';','!','"','\'','`',"\r","\n","\t"];
+        $separators_arr= array('?',' ', '.', ',', ';','!','"','\'','`',"\r","\n","\t");
         $pos = 0;
         while($pos<mb_strlen($text)){
             $min_new_pos = mb_strlen($text);
