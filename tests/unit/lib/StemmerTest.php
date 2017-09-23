@@ -30,7 +30,7 @@ class StemmerTest extends \Codeception\Test\Unit
         expect_that($stemmed = $stemmer->stem_text('Санкт-Петербурга'));
         expect($stemmed)->equals('санкт-петербург');
         expect_that($stemmed = $stemmer->stem_text('Санкт‐Петербурга'));
-        expect($stemmed)->equals('санкт-петербург');
+        expect($stemmed)->equals('санкт‐петербург');
         expect_that($stemmed = $stemmer->stem_text('        4. громадянин
 
 Самым популярным стал тред лингвистки Альфины из Санкт-Петербурга'));
