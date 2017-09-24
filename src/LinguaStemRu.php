@@ -87,7 +87,7 @@ class LinguaStemRu
      */
     function stem_text($text)
     {
-        $separators_arr= array('?',' ', '.', ',', ';','!','"','\'','`');
+        $separators_arr= array('?',' ', '.', ',', ';','!','"','\'','`',"\r","\n","\t");
         $pos = 0;
         while($pos<mb_strlen($text)){
             $min_new_pos = mb_strlen($text);
@@ -99,7 +99,7 @@ class LinguaStemRu
             }
             $newpos = $min_new_pos;
             $word_part = mb_substr($text, $pos, $newpos-$pos);
-            $word = mb_ereg_replace("[^АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯабвгдеёжзийклмнопрстуфхцчшщъыьэюя]","",$word_part);
+            $word = preg_replace("/[^АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯабвгдеёжзийклмнопрстуфхцчшщъыьэюя\x{2010}-]/u","",$word_part);
             if($word == ''){
                 $pos = $newpos+1;
             }else{
